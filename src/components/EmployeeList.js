@@ -1,5 +1,5 @@
 import Employee from "./Employee";
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
 import { Button, Modal } from "react-bootstrap";
 import { EmployeeContext } from "../context/EmployeeContext";
 import AddForm from "./AddForm";
@@ -12,9 +12,15 @@ const EmployeeList = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  useEffect(() => {
+     useEffect(() => {
       handleClose();
     }, [employees])
+
+    const myRef = useRef(null);
+
+    const onButtonClick = () => {
+      myRef.current.focus();
+    }
 
 
   return (
@@ -64,6 +70,9 @@ const EmployeeList = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+
+      <input ref={myRef} type="text"></input>
+      <button onClick={onButtonClick}>Focus Input</button>
 
     </>
 

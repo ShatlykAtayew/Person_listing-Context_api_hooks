@@ -1,6 +1,6 @@
 import {Form, Button} from 'react-bootstrap';
 import { EmployeeContext } from '../context/EmployeeContext';
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 
 const AddForm = () => {
 
@@ -27,6 +27,15 @@ const AddForm = () => {
         e.preventDefault();
         addEmployee(name, email, address, phone);
     }
+
+    useEffect(() => {
+        console.log("Component mounted");
+
+        return () => {
+            console.log("Component unmounted")
+        }
+        
+    }, []);
 
 
     return (
