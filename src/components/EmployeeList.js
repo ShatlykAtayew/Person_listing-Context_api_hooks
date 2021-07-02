@@ -6,7 +6,6 @@ import AddForm from "./AddForm";
 import Pagination from "./Pagination";
 
 
-
 const EmployeeList = () => {
 
   const { sortedEmployees } = useContext(EmployeeContext);
@@ -23,7 +22,7 @@ const EmployeeList = () => {
     setTimeout(() => {
       setShowAlert(false);
     }, 2000);
-  
+
   }
 
   useEffect(() => {
@@ -36,7 +35,7 @@ const EmployeeList = () => {
   const indexOfLastEmployee = currentPage * employeesPerPage;
   const indexOfFirstEmployee = indexOfLastEmployee - employeesPerPage;
   const currentEmployees = sortedEmployees.slice(indexOfFirstEmployee, indexOfLastEmployee);
-  const totalPagesNum = Math.ceil(sortedEmployees.length/ employeesPerPage);
+  const totalPagesNum = Math.ceil(sortedEmployees.length / employeesPerPage);
 
 
   const myRef = useRef(null);
@@ -44,7 +43,6 @@ const EmployeeList = () => {
   const onButtonClick = () => {
     myRef.current.focus();
   }
-
 
   return (
     <>
@@ -59,7 +57,7 @@ const EmployeeList = () => {
         </div>
       </div>
 
-      <Alert show={showAlert} variant="success" onClose={() => setShowAlert(false) } dismissable>
+      <Alert show={showAlert} variant="success" onClose={() => setShowAlert(false)} dismissable>
         Employee List successfully updated!.
       </Alert>
 
@@ -84,7 +82,13 @@ const EmployeeList = () => {
         </tbody>
       </table>
 
-      <Pagination pages={totalPagesNum} setCurrentPage={setCurrentPage}/>
+      <Pagination
+        pages={totalPagesNum}
+        setCurrentPage={setCurrentPage}
+        currentEmployees={currentEmployees}
+        sortedEmployees={sortedEmployees}
+
+      />
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header className="modal-header" closeButton>
