@@ -1,26 +1,49 @@
 import Employee from "./Employee";
 import { useContext, useState, useEffect, useRef } from "react";
-import { Button, Modal } from "react-bootstrap";
+import { Button, Modal, Alert } from "react-bootstrap";
 import { EmployeeContext } from "../context/EmployeeContext";
 import AddForm from "./AddForm";
+import Pagination from "./Pagination";
+
 
 
 const EmployeeList = () => {
 
-  const { employees } = useContext(EmployeeContext);
-  const [show, setShow] = useState(false)
+  const { sortedEmployees } = useContext(EmployeeContext);
+
+  const [showAlert, setShowAlert] = useState(false);
+  const [show, setShow] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [employeesPerPage] = useState(2);
+
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const handleShowAlert = () => {
+    setShowAlert(true);
+    setTimeout(() => {
+      setShowAlert(false);
+    }, 2000);
+  
+  }
 
-     useEffect(() => {
-      handleClose();
-    }, [employees])
-
-    const myRef = useRef(null);
-
-    const onButtonClick = () => {
-      myRef.current.focus();
+  useEffect(() => {
+    handleClose();
+    return () => {
+      handleShowAlert();
     }
+  }, [sortedEmployees])
+
+  const indexOfLastEmployee = currentPage * employeesPerPage;
+  const indexOfFirstEmployee = indexOfLastEmployee - employeesPerPage;
+  const currentEmployees = sortedEmployees.slice(indexOfFirstEmployee, indexOfLastEmployee);
+  const totalPagesNum = Math.ceil(sortedEmployees.length/ employeesPerPage);
+
+
+  const myRef = useRef(null);
+
+  const onButtonClick = () => {
+    myRef.current.focus();
+  }
 
 
   return (
@@ -31,14 +54,14 @@ const EmployeeList = () => {
             <h2>Manage <b>Employees</b></h2>
           </div>
           <div className="col-sm-6">
-            <Button  onClick={handleShow} type="button" className="btn btn-primary text-white" data-toggle="modal"><i className="material-icons">&#xE147;</i> <span>Add New Employee</span></Button>
+            <Button onClick={handleShow} type="button" className="btn btn-primary text-white" data-toggle="modal"><i className="material-icons">&#xE147;</i> <span>Add New Employee</span></Button>
           </div>
         </div>
       </div>
 
-      <alert variant="success">
+      <Alert show={showAlert} variant="success" onClose={() => setShowAlert(false) } dismissable>
         Employee List successfully updated!.
-      </alert>
+      </Alert>
 
       <table className="table table-striped table-hover">
         <thead>
@@ -50,10 +73,18 @@ const EmployeeList = () => {
             <th>Actions</th>
           </tr>
         </thead>
-        <tbody>
-          <Employee employees={employees} />
+        <tbody>{
+          //employees.sort((a,b) => a.name.localCompare(b.name)).map((employee) => (
+          currentEmployees.map((employee) => (
+            <tr key={employee.id}>
+              <Employee employee={employee} />
+            </tr>
+          ))
+        }
         </tbody>
       </table>
+
+      <Pagination pages={totalPagesNum} setCurrentPage={setCurrentPage}/>
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header className="modal-header" closeButton>
