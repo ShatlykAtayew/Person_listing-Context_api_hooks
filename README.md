@@ -1,3 +1,8 @@
+Personal list created using React hooks.
+As a datastorage browser localstorage used.
+Project in progress, authentication feature will be added next...
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
