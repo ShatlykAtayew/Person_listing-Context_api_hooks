@@ -1,5 +1,5 @@
 import Employee from "./Employee";
-import { useContext, useState, useEffect, useRef } from "react";
+import { useContext, useState, useEffect, useRef, useReducer } from "react";
 import { Button, Modal, Alert } from "react-bootstrap";
 import { EmployeeContext } from "../context/EmployeeContext";
 import AddForm from "./AddForm";
@@ -43,6 +43,22 @@ const EmployeeList = () => {
   const onButtonClick = () => {
     myRef.current.focus();
   }
+
+  const reducer = (state, action) => {
+    switch(action.type) {
+      case 'increment':
+        return {count: state.count +1}
+
+      case 'decrement':
+        return {count: state.count -1}
+
+      default:
+        throw new Error();
+    }
+  }
+
+  const initialState = { count: 0 };
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   return (
     <>
@@ -89,6 +105,10 @@ const EmployeeList = () => {
         sortedEmployees={sortedEmployees}
 
       />
+
+      Count : {state.count}
+      <button onClick={() => dispatch({type: 'increment'})}>+</button>
+      <button onClick={() => dispatch({type: 'decrement'})}>-</button>
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header className="modal-header" closeButton>
